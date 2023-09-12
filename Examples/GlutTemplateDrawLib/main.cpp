@@ -1,8 +1,8 @@
-#include <IncludeGlut.h>
-#include <stdlib.h>
-#include "drwGlslShader.h"
-#include <sstream>
 #include "SVL.h"
+#include "drwGlslShader.h"
+#include <IncludeGlut.h>
+#include <sstream>
+#include <stdlib.h>
 
 // original app params
 int winWidth = 800;
@@ -13,122 +13,142 @@ const char appName[] = "Glut Template";
 drwGlslShader shaderProgram;
 float lineRadius = 1.0;
 
-Vec2 point1( 50.0, 50.0 );
-Vec2 point2( 300.0, 300.0 );
+Vec2 point1(50.0, 50.0);
+Vec2 point2(300.0, 300.0);
 
-void RenderString( float x, float y, const char * string )
-{
-    glColor3f( 1.0, 1.0, 1.0 );
-    glRasterPos2f( x, y );
-    const char * it = string;
-    while( *it != 0 )
-    {
-        glutBitmapCharacter( GLUT_BITMAP_9_BY_15, *it );
-        ++it;
-    }
+void RenderString(float x, float y, const char *string) {
+  glColor3f(1.0, 1.0, 1.0);
+  glRasterPos2f(x, y);
+  const char *it = string;
+  while (*it != 0) {
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *it);
+    ++it;
+  }
 }
 
-void display(void)
-{
-	glClear( GL_COLOR_BUFFER_BIT );
-	
-	shaderProgram.UseProgram( true );
-    shaderProgram.SetVariable( "base_width", lineRadius );
-    shaderProgram.SetVariable( "pix_per_unit", float(1.0) );
-    shaderProgram.SetVariable( "pix_margin", float(4.0) );
-    shaderProgram.SetVariable( "pix_damp_width", float(1.0) );
-    shaderProgram.SetVariable( "sigma_large", float(0.4) );
-    shaderProgram.SetVariable( "sigma_small", float(0.1) );
+void display(void) {
+  glClear(GL_COLOR_BUFFER_BIT);
 
-    Vec2 diff = point2 - point1;
-    diff.Normalise();
-    Vec2 front = diff;
-    Vec2 back = -1 * diff;
-    Vec2 left( -diff[1], diff[0] );
-    Vec2 right = -1.0 * left;
-    Vec2 backRight = back + right;
-    Vec2 backLeft = back + left;
-    Vec2 frontRight = front + right;
-    Vec2 frontLeft = front + left;
-	
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glColor4d( 1.0, 0.0, 0.0, 0.0 );
-	glBegin( GL_QUADS );
-    {
-        // Start right
-        glTexCoord3f( 0, 1.0, 1.0 );
-        glNormal3f( back[0], back[1], 0 );              glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 1.0, 1.0 );
-        glNormal3f( backRight[0], backRight[1], 0 );    glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( right[0], right[1], 0 );            glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point1[0], point1[1] );
+  shaderProgram.UseProgram(true);
+  shaderProgram.SetVariable("base_width", lineRadius);
+  shaderProgram.SetVariable("pix_per_unit", float(1.0));
+  shaderProgram.SetVariable("pix_margin", float(4.0));
+  shaderProgram.SetVariable("pix_damp_width", float(1.0));
+  shaderProgram.SetVariable("sigma_large", float(0.4));
+  shaderProgram.SetVariable("sigma_small", float(0.1));
 
-        // Start left
-        glTexCoord3f( 0.0, 1.0, 1.0 );
-        glNormal3f( back[0], back[1], 0 );              glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 0.0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( left[0], left[1], 0 );              glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 1.0, 1.0 );
-        glNormal3f( backLeft[0], backLeft[1], 0 );      glVertex2d( point1[0], point1[1] );
+  Vec2 diff = point2 - point1;
+  diff.Normalise();
+  Vec2 front = diff;
+  Vec2 back = -1 * diff;
+  Vec2 left(-diff[1], diff[0]);
+  Vec2 right = -1.0 * left;
+  Vec2 backRight = back + right;
+  Vec2 backLeft = back + left;
+  Vec2 frontRight = front + right;
+  Vec2 frontLeft = front + left;
 
-        // Center right
-        glTexCoord3f( 0.0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( right[0], right[1], 0 );            glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( right[0], right[1], 0 );            glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point2[0], point2[1] );
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glColor4d(1.0, 0.0, 0.0, 0.0);
+  glBegin(GL_QUADS);
+  {
+    // Start right
+    glTexCoord3f(0, 1.0, 1.0);
+    glNormal3f(back[0], back[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 1.0, 1.0);
+    glNormal3f(backRight[0], backRight[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(right[0], right[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point1[0], point1[1]);
 
-        // Center left
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( left[0], left[1], 0 );              glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 0.0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point1[0], point1[1] );
-        glTexCoord3f( 0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( left[0], left[1], 0 );              glVertex2d( point2[0], point2[1] );
+    // Start left
+    glTexCoord3f(0.0, 1.0, 1.0);
+    glNormal3f(back[0], back[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(0.0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(left[0], left[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 1.0, 1.0);
+    glNormal3f(backLeft[0], backLeft[1], 0);
+    glVertex2d(point1[0], point1[1]);
 
-        // end right
-        glTexCoord3f( 0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( right[0], right[1], 0 );            glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 1.0, 1.0, 1.0 );
-        glNormal3f( frontRight[0], frontRight[1], 0 );  glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 0.0, 1.0, 1.0 );
-        glNormal3f( front[0], front[1], 0 );            glVertex2d( point2[0], point2[1] );
+    // Center right
+    glTexCoord3f(0.0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(right[0], right[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(right[0], right[1], 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point2[0], point2[1]);
 
-        // end left
-        glTexCoord3f( 0, 0.0, 1.0 );
-        glNormal3f( 0, 0, 0 );                          glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 0, 1.0, 1.0 );
-        glNormal3f( front[0], front[1], 0 );            glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 1.0, 1.0, 1.0 );
-        glNormal3f( frontLeft[0], frontLeft[1], 0 );    glVertex2d( point2[0], point2[1] );
-        glTexCoord3f( 1.0, 0.0, 1.0 );
-        glNormal3f( left[0], left[1], 0 );              glVertex2d( point2[0], point2[1] );
-    }
-	glEnd();
-	
-	shaderProgram.UseProgram( false );
+    // Center left
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(left[0], left[1], 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(0.0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point1[0], point1[1]);
+    glTexCoord3f(0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(left[0], left[1], 0);
+    glVertex2d(point2[0], point2[1]);
 
-    std::stringstream s;
-    s << "line radius: " << lineRadius;
-    RenderString( 300, 20, s.str().c_str() );
+    // end right
+    glTexCoord3f(0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(right[0], right[1], 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(1.0, 1.0, 1.0);
+    glNormal3f(frontRight[0], frontRight[1], 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(0.0, 1.0, 1.0);
+    glNormal3f(front[0], front[1], 0);
+    glVertex2d(point2[0], point2[1]);
 
-    glutSwapBuffers();
+    // end left
+    glTexCoord3f(0, 0.0, 1.0);
+    glNormal3f(0, 0, 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(0, 1.0, 1.0);
+    glNormal3f(front[0], front[1], 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(1.0, 1.0, 1.0);
+    glNormal3f(frontLeft[0], frontLeft[1], 0);
+    glVertex2d(point2[0], point2[1]);
+    glTexCoord3f(1.0, 0.0, 1.0);
+    glNormal3f(left[0], left[1], 0);
+    glVertex2d(point2[0], point2[1]);
+  }
+  glEnd();
+
+  shaderProgram.UseProgram(false);
+
+  std::stringstream s;
+  s << "line radius: " << lineRadius;
+  RenderString(300, 20, s.str().c_str());
+
+  glutSwapBuffers();
 }
 
-
-static const char * pixelShaderCode = " \
+static const char *pixelShaderCode = " \
 varying float margin; \
 varying float sigma; \
 \
@@ -154,7 +174,7 @@ void main() \
 	} \
 }";
 
-static const char * vertexShaderCode = " \
+static const char *vertexShaderCode = " \
 uniform float base_width; \
 uniform float pix_per_unit; \
 uniform float pix_margin; \
@@ -197,129 +217,106 @@ void main() \
     gl_TexCoord[0] = gl_MultiTexCoord0; \
 }";
 
+void init(void) {
+  shaderProgram.AddShaderMemSource(pixelShaderCode);
+  shaderProgram.AddVertexShaderMemSource(vertexShaderCode);
+  bool shaderInit = shaderProgram.Init();
+  if (!shaderInit)
+    exit(-1);
+  shaderProgram.UseProgram(true);
+  shaderProgram.SetVariable("line_radius", lineRadius);
+  shaderProgram.SetVariable("min_line_radius", float(.5));
+  shaderProgram.SetVariable("pix_margin", float(2.0));
+  shaderProgram.UseProgram(false);
 
-void init(void) 
-{
-    shaderProgram.AddShaderMemSource( pixelShaderCode );
-	shaderProgram.AddVertexShaderMemSource( vertexShaderCode );
-	bool shaderInit = shaderProgram.Init();
-	if( !shaderInit )
-		exit( -1 );
-	shaderProgram.UseProgram( true );
-	shaderProgram.SetVariable( "line_radius", lineRadius );
-    shaderProgram.SetVariable( "min_line_radius", float(.5) );
-    shaderProgram.SetVariable( "pix_margin", float(2.0) );
-	shaderProgram.UseProgram( false );
-	
-	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f);
-   //glShadeModel ( GL_SMOOTH );
-   glShadeModel ( GL_FLAT );
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  // glShadeModel ( GL_SMOOTH );
+  glShadeModel(GL_FLAT);
 
-   // enable texturing
-   //glEnable( GL_TEXTURE_2D );
-
+  // enable texturing
+  // glEnable( GL_TEXTURE_2D );
 }
 
-
-void reshape(int w, int h)
-{
-    winWidth = w;
-    winHeight = h;
-    glViewport ( 0, 0, w, h );   
-	gluOrtho2D( 0, w, 0, h );
+void reshape(int w, int h) {
+  winWidth = w;
+  winHeight = h;
+  glViewport(0, 0, w, h);
+  gluOrtho2D(0, w, 0, h);
 }
 
-
-void mouse(int button, int state, int x, int y) 
-{
-   switch (button) 
-   {
-   case GLUT_LEFT_BUTTON:
-       point2 = Vec2( x, winHeight - y - 1 );
-     break;
-   }
-   glutPostRedisplay();
+void mouse(int button, int state, int x, int y) {
+  switch (button) {
+  case GLUT_LEFT_BUTTON:
+    point2 = Vec2(x, winHeight - y - 1);
+    break;
+  }
+  glutPostRedisplay();
 }
 
-
-void keyboard (unsigned char key, int x, int y)
-{
-   switch (key) 
-   {
-   case 27:
-	   exit(0);
-	   break;
-	}
-   glutPostRedisplay();
+void keyboard(unsigned char key, int x, int y) {
+  switch (key) {
+  case 27:
+    exit(0);
+    break;
+  }
+  glutPostRedisplay();
 }
 
-
-void special(int key, int x, int y)
-{
-    switch (key) 
-    {
-    case GLUT_KEY_UP:
-        {
-            if( lineRadius >= 1.0 )
-                lineRadius += 1.0;
-            else
-                lineRadius *= 1.5;
-			glutPostRedisplay();
-        }
-        break;
-    case GLUT_KEY_LEFT:
-		break;
-    case GLUT_KEY_RIGHT:
-        break;
-    case GLUT_KEY_DOWN:
-        {
-            if( lineRadius >= 2.0 )
-                lineRadius -= 1.0;
-            else
-                lineRadius *= .75;
-			glutPostRedisplay();
-        }
-        break;
-    }
+void special(int key, int x, int y) {
+  switch (key) {
+  case GLUT_KEY_UP: {
+    if (lineRadius >= 1.0)
+      lineRadius += 1.0;
+    else
+      lineRadius *= 1.5;
+    glutPostRedisplay();
+  } break;
+  case GLUT_KEY_LEFT:
+    break;
+  case GLUT_KEY_RIGHT:
+    break;
+  case GLUT_KEY_DOWN: {
+    if (lineRadius >= 2.0)
+      lineRadius -= 1.0;
+    else
+      lineRadius *= .75;
+    glutPostRedisplay();
+  } break;
+  }
 }
 
-
-void special_up(int key, int x, int y)
-{
-   switch (key) 
-    {
-    case GLUT_KEY_UP:
-        break;
-    case GLUT_KEY_LEFT:
-        break;
-    case GLUT_KEY_RIGHT:
-        break;
-    case GLUT_KEY_DOWN:
-        break;
-    }
+void special_up(int key, int x, int y) {
+  switch (key) {
+  case GLUT_KEY_UP:
+    break;
+  case GLUT_KEY_LEFT:
+    break;
+  case GLUT_KEY_RIGHT:
+    break;
+  case GLUT_KEY_DOWN:
+    break;
+  }
 }
 
-
-//void Idle(void)
+// void Idle(void)
 //{
-//}
-   
-int main(int argc, char** argv)
-{
-	glutInit( &argc, argv);
-	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB );
-	glutInitWindowSize (winWidth, winHeight); 
-	glutInitWindowPosition (winX, winY);
-	glutCreateWindow (appName);
-	init ();
-	glutDisplayFunc(display); 
-	glutReshapeFunc(reshape); 
-	glutMouseFunc(mouse);
-	glutKeyboardFunc(keyboard);
-	//glutIdleFunc(Idle);
-    glutSpecialFunc( special );
-    glutSpecialUpFunc( special_up );
-	//glutFullScreen();
-	glutMainLoop();
-	return 0;
+// }
+
+int main(int argc, char **argv) {
+  glutInit(&argc, argv);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  glutInitWindowSize(winWidth, winHeight);
+  glutInitWindowPosition(winX, winY);
+  glutCreateWindow(appName);
+  init();
+  glutDisplayFunc(display);
+  glutReshapeFunc(reshape);
+  glutMouseFunc(mouse);
+  glutKeyboardFunc(keyboard);
+  // glutIdleFunc(Idle);
+  glutSpecialFunc(special);
+  glutSpecialUpFunc(special_up);
+  // glutFullScreen();
+  glutMainLoop();
+  return 0;
 }

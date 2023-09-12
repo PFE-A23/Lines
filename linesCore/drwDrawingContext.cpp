@@ -1,27 +1,23 @@
 #include "drwDrawingContext.h"
 #include "drwGLRenderer.h"
 
-drwDrawableTexture * drwDrawingContext::GetWorkingTexture() const
-{
-    return m_renderer->GetWorkTexture();
+drwDrawableTexture *drwDrawingContext::GetWorkingTexture() const {
+  return m_renderer->GetWorkTexture();
 }
 
-drwGlslShader * drwDrawingContext::GetWidelineShader() const
-{
-    return m_renderer->GetWidelineShader();
+drwGlslShader *drwDrawingContext::GetWidelineShader() const {
+  return m_renderer->GetWidelineShader();
 }
 
-void drwDrawingContext::SetWidelineShader( drwGlslShader * shader )
-{
-    m_renderer->SetWidelineShader( shader );
+void drwDrawingContext::SetWidelineShader(drwGlslShader *shader) {
+  m_renderer->SetWidelineShader(shader);
 }
 
-void drwDrawingContext::WorldToGLFrame( double xworld, double yworld, int & xwin, int & ywin ) const
-{
-    m_renderer->WorldToGLFrame( xworld, yworld, xwin, ywin );
+void drwDrawingContext::WorldToGLFrame(double xworld, double yworld, int &xwin,
+                                       int &ywin) const {
+  m_renderer->WorldToGLFrame(xworld, yworld, xwin, ywin);
 }
 
-double drwDrawingContext::PixelsPerUnit() const
-{
-    return m_renderer->PixelsPerUnit();
+double drwDrawingContext::PixelsPerUnit() const {
+  return m_renderer->PixelsPerUnit();
 }

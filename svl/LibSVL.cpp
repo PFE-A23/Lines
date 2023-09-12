@@ -12,8 +12,8 @@
 #define VL_CHECKING
 #endif
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
 
@@ -21,12 +21,12 @@ using namespace std;
 #include "Constants.h"
 #include "Utils.h"
 
+#include "Vec.cpp"
 #include "Vec2.cpp"
 #include "Vec3.cpp"
 #include "Vec4.cpp"
-#include "Vec.cpp"
 
+#include "Mat.cpp"
 #include "Mat2.cpp"
 #include "Mat3.cpp"
 #include "Mat4.cpp"
-#include "Mat.cpp"

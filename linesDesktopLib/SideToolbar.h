@@ -9,34 +9,31 @@ class SideToolbar;
 
 class LinesApp;
 
-class SideToolbar : public QWidget
-{
-    Q_OBJECT
+class SideToolbar : public QWidget {
+  Q_OBJECT
 
 public:
+  explicit SideToolbar(QWidget *parent = 0);
+  ~SideToolbar();
 
-    explicit SideToolbar(QWidget *parent = 0);
-    ~SideToolbar();
-
-    void SetApp( LinesApp * app );
-    int GetButtonWidth();
-    void SetButtonWidth( int w );
+  void SetApp(LinesApp *app);
+  int GetButtonWidth();
+  void SetButtonWidth(int w);
 
 private slots:
 
-    void OnScrollWidgetClick(int);
-    void on_nextFrameButton_clicked();
-    void on_prevFrameButton_clicked();
-    void on_increaseSizeButton_clicked();
-    void on_decreaseSizeButton_clicked();
+  void OnScrollWidgetClick(int);
+  void on_nextFrameButton_clicked();
+  void on_prevFrameButton_clicked();
+  void on_increaseSizeButton_clicked();
+  void on_decreaseSizeButton_clicked();
 
 private:
+  void UpdateUi();
 
-    void UpdateUi();
+  Ui::SideToolbar *ui;
 
-    Ui::SideToolbar *ui;
-
-    LinesApp * m_app;
+  LinesApp *m_app;
 };
 
 #endif

@@ -3,13 +3,12 @@
 
 class Box2i;
 
-class drwDrawingSurface
-{
+class drwDrawingSurface {
 public:
-    drwDrawingSurface() {}
-    ~drwDrawingSurface() {}
-    virtual void NeedRedraw() = 0;
-    virtual void NotifyPlaybackStartStop( bool isStart ) = 0;
+  drwDrawingSurface() {}
+  ~drwDrawingSurface() {}
+  virtual void NeedRedraw() = 0;
+  virtual void NotifyPlaybackStartStop(bool isStart) = 0;
 };
 
 #endif

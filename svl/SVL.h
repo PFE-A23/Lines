@@ -11,7 +11,6 @@
     Copyright:      (c) 1995-2001, Andrew Willmott
  */
 
-
 #ifndef __SVL__
 #define __SVL__
 
@@ -28,19 +27,19 @@
 #include "Constants.h"
 #include "Utils.h"
 
+#include "Vec.h"
 #include "Vec2.h"
 #include "Vec3.h"
 #include "Vec4.h"
-#include "Vec.h"
 
+#include "Mat.h"
 #include "Mat2.h"
 #include "Mat3.h"
 #include "Mat4.h"
-#include "Mat.h"
 
 #include "Transform.h"
 
-#include "Box2i.h"
 #include "Box2d.h"
+#include "Box2i.h"
 
 #endif

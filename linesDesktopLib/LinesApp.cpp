@@ -9,254 +9,160 @@ static int nbOnionOneAfter = 0;
 static int nbOnionManyBefore = 5;
 static int nbOnionManyAfter = 5;
 
-LinesApp::LinesApp( LinesCore * lc, drwNetworkManager * netManager )
-    : m_lines( lc )
-    , m_netManager( netManager )
-{
-    drwLineTool * lineTool = GetLineTool();
-    connect( lineTool, SIGNAL(ParametersChangedSignal()), this, SLOT(LineParamsModifiedSlot()) );
-    connect( m_lines, SIGNAL(DisplaySettingsModified()), this, SLOT(DisplayParamsModifiedSlot()) );
-    connect( m_netManager, SIGNAL(StateChangedSignal()), this, SLOT(NetworkManagerStateChangedSlot()) );
+LinesApp::LinesApp(LinesCore *lc, drwNetworkManager *netManager)
+    : m_lines(lc), m_netManager(netManager) {
+  drwLineTool *lineTool = GetLineTool();
+  connect(lineTool, SIGNAL(ParametersChangedSignal()), this,
+          SLOT(LineParamsModifiedSlot()));
+  connect(m_lines, SIGNAL(DisplaySettingsModified()), this,
+          SLOT(DisplayParamsModifiedSlot()));
+  connect(m_netManager, SIGNAL(StateChangedSignal()), this,
+          SLOT(NetworkManagerStateChangedSlot()));
 }
 
-LinesApp::~LinesApp()
-{
+LinesApp::~LinesApp() {}
+
+bool LinesApp::IsBrush() { return !GetLineTool()->GetErase(); }
+
+void LinesApp::UseBrush() { GetLineTool()->SetErase(false); }
+
+void LinesApp::IncreaseBrushSize() {
+  double size = GetLineWidth();
+  SetLineWidth(size + percentBrushIncrease * size);
 }
 
-bool LinesApp::IsBrush()
-{
-    return !GetLineTool()->GetErase();
+void LinesApp::DecreaseBrushSize() {
+  double size = GetLineWidth();
+  SetLineWidth(size - percentBrushIncrease * size);
 }
 
-void LinesApp::UseBrush()
-{
-    GetLineTool()->SetErase( false );
+void LinesApp::SetLineWidth(double w) {
+  GetLineTool()->SetBaseWidth(w);
+  m_lines->SetShowCursor(true);
 }
 
-void LinesApp::IncreaseBrushSize()
-{
-    double size = GetLineWidth();
-    SetLineWidth( size + percentBrushIncrease * size );
+double LinesApp::GetLineWidth() { return GetLineTool()->GetBaseWidth(); }
+
+void LinesApp::SetLineColor(Vec4 &color) { GetLineTool()->SetColor(color); }
+
+Vec4 LinesApp::GetLineColor() { return GetLineTool()->GetColor(); }
+
+void LinesApp::SetErasing() { GetLineTool()->SetErase(true); }
+
+bool LinesApp::IsErasing() { return GetLineTool()->GetErase(); }
+
+bool LinesApp::IsPressureWidthEnabled() {
+  return GetLineTool()->IsPresureWidthEnabled();
 }
 
-void LinesApp::DecreaseBrushSize()
-{
-    double size = GetLineWidth();
-    SetLineWidth( size - percentBrushIncrease * size );
+bool LinesApp::IsUsingPressureWidth() {
+  return GetLineTool()->GetPressureWidth();
 }
 
-void LinesApp::SetLineWidth( double w )
-{
-    GetLineTool()->SetBaseWidth( w );
-    m_lines->SetShowCursor( true );
+void LinesApp::SetUsePressureWidth(bool use) {
+  GetLineTool()->SetPressureWidth(use);
 }
 
-double LinesApp::GetLineWidth()
-{
-    return GetLineTool()->GetBaseWidth();
+bool LinesApp::IsPressureOpacityEnabled() {
+  return GetLineTool()->IsPresureOpacityEnabled();
 }
 
-void LinesApp::SetLineColor( Vec4 & color )
-{
-    GetLineTool()->SetColor( color );
+bool LinesApp::IsUsingPressureOpacity() {
+  return GetLineTool()->GetPressureOpacity();
 }
 
-Vec4 LinesApp::GetLineColor()
-{
-    return GetLineTool()->GetColor();
+void LinesApp::SetUsePressureOpacity(bool use) {
+  GetLineTool()->SetPressureOpacity(use);
 }
 
-void LinesApp::SetErasing()
-{
-    GetLineTool()->SetErase( true );
+bool LinesApp::IsFilling() { return GetLineTool()->GetFill(); }
+
+void LinesApp::SetFill(bool fill) { GetLineTool()->SetFill(fill); }
+
+void LinesApp::SetPersistence(int p) { GetLineTool()->SetPersistence(p); }
+
+int LinesApp::GetPersistence() { return GetLineTool()->GetPersistence(); }
+
+void LinesApp::GotoNextFrame() { m_lines->NextFrame(); }
+
+void LinesApp::GotoPreviousFrame() { m_lines->PrevFrame(); }
+
+bool LinesApp::IsFrameChangeManual() { return GetFrameChangeMode() == Manual; }
+
+void LinesApp::SetFrameChangeManual() { SetFrameChangeMode(Manual); }
+
+bool LinesApp::IsFrameChangeJumpAfter() {
+  return GetFrameChangeMode() == AfterIntervention;
 }
 
-bool LinesApp::IsErasing()
-{
-    return GetLineTool()->GetErase();
+void LinesApp::SetFrameChangeJumpAfter() {
+  SetFrameChangeMode(AfterIntervention);
 }
 
-bool LinesApp::IsPressureWidthEnabled()
-{
-    return GetLineTool()->IsPresureWidthEnabled();
+bool LinesApp::IsFrameChangePlay() { return GetFrameChangeMode() == Play; }
+
+void LinesApp::SetFrameChangePlay() { SetFrameChangeMode(Play); }
+
+drwFrameChangeMode LinesApp::GetFrameChangeMode() {
+  return GetLineTool()->GetFrameChangeMode();
 }
 
-bool LinesApp::IsUsingPressureWidth()
-{
-    return GetLineTool()->GetPressureWidth();
+void LinesApp::SetFrameChangeMode(drwFrameChangeMode mode) {
+  GetLineTool()->SetFrameChangeMode(mode);
 }
 
-void LinesApp::SetUsePressureWidth( bool use )
-{
-    GetLineTool()->SetPressureWidth( use );
+void LinesApp::ToggleOnionSkinEnabled() {
+  SetOnionSkinEnabled(!IsOnionSkinEnabled());
 }
 
-bool LinesApp::IsPressureOpacityEnabled()
-{
-    return GetLineTool()->IsPresureOpacityEnabled();
+bool LinesApp::IsOnionSkinEnabled() { return m_lines->GetOnionSkinEnabled(); }
+
+void LinesApp::SetOnionSkinEnabled(bool enabled) {
+  m_lines->SetOnionSkinEnabled(enabled);
 }
 
-bool LinesApp::IsUsingPressureOpacity()
-{
-    return GetLineTool()->GetPressureOpacity();
+void LinesApp::SetOnionSkinBefore(int nbFrames) {
+  m_lines->SetOnionSkinBefore(nbFrames);
 }
-
-void LinesApp::SetUsePressureOpacity( bool use )
-{
-    GetLineTool()->SetPressureOpacity( use );
-}
-
-bool LinesApp::IsFilling()
-{
-    return GetLineTool()->GetFill();
-}
-
-void LinesApp::SetFill( bool fill )
-{
-    GetLineTool()->SetFill( fill );
-}
-
-void LinesApp::SetPersistence( int p )
-{
-    GetLineTool()->SetPersistence( p );
-}
-
-int LinesApp::GetPersistence()
-{
-    return GetLineTool()->GetPersistence();
-}
-
-void LinesApp::GotoNextFrame()
-{
-    m_lines->NextFrame();
-}
-
-void LinesApp::GotoPreviousFrame()
-{
-    m_lines->PrevFrame();
-}
-
-bool LinesApp::IsFrameChangeManual()
-{
-    return GetFrameChangeMode() == Manual;
-}
-
-void LinesApp::SetFrameChangeManual()
-{
-    SetFrameChangeMode( Manual );
-}
-
-bool LinesApp::IsFrameChangeJumpAfter()
-{
-    return GetFrameChangeMode() == AfterIntervention;
-}
-
-void LinesApp::SetFrameChangeJumpAfter()
-{
-    SetFrameChangeMode( AfterIntervention );
-}
-
-bool LinesApp::IsFrameChangePlay()
-{
-    return GetFrameChangeMode() == Play;
-}
-
-void LinesApp::SetFrameChangePlay()
-{
-    SetFrameChangeMode( Play );
-}
-
-drwFrameChangeMode LinesApp::GetFrameChangeMode()
-{
-    return GetLineTool()->GetFrameChangeMode();
-}
-
-void LinesApp::SetFrameChangeMode( drwFrameChangeMode mode )
-{
-    GetLineTool()->SetFrameChangeMode( mode );
-}
-
-void LinesApp::ToggleOnionSkinEnabled()
-{
-    SetOnionSkinEnabled( !IsOnionSkinEnabled() );
-}
-
-bool LinesApp::IsOnionSkinEnabled()
-{
-    return m_lines->GetOnionSkinEnabled();
-}
-
-void LinesApp::SetOnionSkinEnabled( bool enabled )
-{
-    m_lines->SetOnionSkinEnabled( enabled );
-}
-
-void LinesApp::SetOnionSkinBefore( int nbFrames ) { m_lines->SetOnionSkinBefore( nbFrames ); }
 int LinesApp::GetOnionSkinBefore() { return m_lines->GetOnionSkinBefore(); }
 
-void LinesApp::SetOnionSkinAfter( int nbFrames ) { m_lines->SetOnionSkinAfter( nbFrames ); }
+void LinesApp::SetOnionSkinAfter(int nbFrames) {
+  m_lines->SetOnionSkinAfter(nbFrames);
+}
 int LinesApp::GetOnionSkinAfter() { return m_lines->GetOnionSkinAfter(); }
 
-void LinesApp::ToggleInOnionSkin()
-{
-    m_lines->ToggleInOnionFrame();
+void LinesApp::ToggleInOnionSkin() { m_lines->ToggleInOnionFrame(); }
+
+void LinesApp::ToggleOutOnionSkin() { m_lines->ToggleOutOnionFrame(); }
+
+bool LinesApp::IsFlippingModeEnabled() {
+  return m_lines->IsFlippingFrameModeEnabled();
 }
 
-void LinesApp::ToggleOutOnionSkin()
-{
-    m_lines->ToggleOutOnionFrame();
+void LinesApp::SetFlippingModeEnabled(bool enabled) {
+  m_lines->SetFlippingFrameModeEnabled(enabled);
 }
 
-bool LinesApp::IsFlippingModeEnabled()
-{
-    return m_lines->IsFlippingFrameModeEnabled();
-}
+bool LinesApp::IsSharing() { return m_netManager->IsSharing(); }
 
-void LinesApp::SetFlippingModeEnabled( bool enabled )
-{
-    m_lines->SetFlippingFrameModeEnabled( enabled );
-}
+bool LinesApp::IsConnected() { return m_netManager->IsConnected(); }
 
-bool LinesApp::IsSharing()
-{
-    return m_netManager->IsSharing();
-}
+QString LinesApp::GetServerName() { return m_netManager->GetServerUserName(); }
 
-bool LinesApp::IsConnected()
-{
-    return m_netManager->IsConnected();
-}
-
-QString LinesApp::GetServerName()
-{
-    return m_netManager->GetServerUserName();
-}
-
-bool LinesApp::IsMaster()
-{
+bool LinesApp::IsMaster() {
 #ifdef LINES_MASTER_BUILD
-    return true;
+  return true;
 #else
-    return false;
+  return false;
 #endif
 }
 
-void LinesApp::LineParamsModifiedSlot()
-{
-    emit LineParamsModified();
+void LinesApp::LineParamsModifiedSlot() { emit LineParamsModified(); }
+
+void LinesApp::DisplayParamsModifiedSlot() { emit DisplayParamsModified(); }
+
+void LinesApp::NetworkManagerStateChangedSlot() {
+  emit NetworkManagerStateChangedSignal();
 }
 
-void LinesApp::DisplayParamsModifiedSlot()
-{
-    emit DisplayParamsModified();
-}
-
-void LinesApp::NetworkManagerStateChangedSlot()
-{
-    emit NetworkManagerStateChangedSignal();
-}
-
-drwLineTool * LinesApp::GetLineTool()
-{
-    return m_lines->GetLineTool();
-}
+drwLineTool *LinesApp::GetLineTool() { return m_lines->GetLineTool(); }

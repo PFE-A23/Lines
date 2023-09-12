@@ -1,34 +1,30 @@
 #ifndef __Frame_h_
 #define __Frame_h_
 
-//#include "macros.h"
-#include <vector>
+// #include "macros.h"
 #include "Node.h"
 #include <QReadWriteLock>
+#include <vector>
 
-class Frame
-{
-		
+class Frame {
+
 public:
-		
-	Frame();
-	~Frame();
-	
-	void Clear();
-		
-    void Draw( drwDrawingContext & context );
-    int AddNode( Node * node );
-	Node * GetNodeById( unsigned Id );
+  Frame();
+  ~Frame();
 
-    Node * LockNode( int nodeIndex );
-    void UnlockNode( int nodeIndex );
-		
+  void Clear();
+
+  void Draw(drwDrawingContext &context);
+  int AddNode(Node *node);
+  Node *GetNodeById(unsigned Id);
+
+  Node *LockNode(int nodeIndex);
+  void UnlockNode(int nodeIndex);
+
 protected:
-		
-    typedef std::vector<Node*> NodeCont;
-	NodeCont Nodes;
-    QReadWriteLock m_nodesLock;
-		
+  typedef std::vector<Node *> NodeCont;
+  NodeCont Nodes;
+  QReadWriteLock m_nodesLock;
 };
 
 #endif

@@ -5,25 +5,22 @@
 
 class QBoxLayout;
 
-class drwAspectRatioWidget : public QWidget
-{
+class drwAspectRatioWidget : public QWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-
-    explicit drwAspectRatioWidget( QWidget * parent = 0 );
-    void resizeEvent( QResizeEvent * event );
-    void setClientWidget( QWidget * w );
-    void setAspectRatioEnabled( bool e );
+  explicit drwAspectRatioWidget(QWidget *parent = 0);
+  void resizeEvent(QResizeEvent *event);
+  void setClientWidget(QWidget *w);
+  void setAspectRatioEnabled(bool e);
 
 private:
+  void UpdateStretch(int w, int h);
 
-    void UpdateStretch( int w, int h );
-
-    QBoxLayout * m_layout;
-    QWidget * m_widget;
-    bool m_aspectRatioEnabled;
+  QBoxLayout *m_layout;
+  QWidget *m_widget;
+  bool m_aspectRatioEnabled;
 };
 
 #endif

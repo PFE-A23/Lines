@@ -5,45 +5,41 @@
 
 class QPoint;
 
-class drwGradientWidget : public QWidget
-{
-    Q_OBJECT
+class drwGradientWidget : public QWidget {
+  Q_OBJECT
 
 public:
+  explicit drwGradientWidget(QWidget *parent = 0);
+  ~drwGradientWidget();
 
-    explicit drwGradientWidget( QWidget *parent = 0);
-	~drwGradientWidget();
+  void setVertical(bool v);
+  bool isVertical();
 
-    void setVertical( bool v );
-    bool isVertical();
-
-	double sliderValue();
-	void setSliderValue( double );
+  double sliderValue();
+  void setSliderValue(double);
 
 signals:
 
-	void sliderValueChanged( double value );
+  void sliderValueChanged(double value);
 
 protected:
-
-    void    mouseMoveEvent(QMouseEvent *event);
-    void    mousePressEvent(QMouseEvent *event);
-    void    mouseReleaseEvent(QMouseEvent *event);
-    void    enterEvent(QEvent *event);
-    void    leaveEvent(QEvent *event);
-    void    paintEvent(QPaintEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
+  void enterEvent(QEvent *event);
+  void leaveEvent(QEvent *event);
+  void paintEvent(QPaintEvent *event);
 
 private:
+  void setSliderValue(QPoint p);
+  int sliderValueToWidgetPos(double);
 
-    void   setSliderValue( QPoint p );
-	int    sliderValueToWidgetPos( double );
+  bool m_vertical;
+  int m_cursorWidth;
+  int m_cursorHeight;
+  double m_sliderValue;
 
-    bool    m_vertical;
-	int     m_cursorWidth;
-	int		m_cursorHeight;
-	double  m_sliderValue;
-
-	bool    m_leftButtonPressed;
+  bool m_leftButtonPressed;
 };
 
 #endif

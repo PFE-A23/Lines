@@ -1,15 +1,14 @@
 #ifndef __drwRemoteCommandSource_h_
 #define __drwRemoteCommandSource_h_
 
-class drwRemoteCommandIO
-{
+class drwRemoteCommandIO {
 public:
-    drwRemoteCommandIO() {}
-    ~drwRemoteCommandIO() {}
+  drwRemoteCommandIO() {}
+  ~drwRemoteCommandIO() {}
 
-    virtual void SendCommand( drwCommand::s_ptr ) = 0;
-    virtual bool IsSharing() = 0;
-    virtual bool IsConnected() = 0;
+  virtual void SendCommand(drwCommand::s_ptr) = 0;
+  virtual bool IsSharing() = 0;
+  virtual bool IsConnected() = 0;
 };
 
 #endif
